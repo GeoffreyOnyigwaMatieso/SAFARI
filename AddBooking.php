@@ -290,6 +290,29 @@ button
 
    ?>
 
+   	<!--CODE TO SEND SMS-->  
+	<?php
+if(isset($_POST["AddBooking"])){
+    $baseurl = "https://api.mobitechtechnologies.com/sms/sendsms";
+    $ch = curl_init($baseurl);
+    $data = array(
+        "mobile" => $_POST['tel'],
+        "response_type" => "json",
+        "sender_name" => "23107",
+        "service_id" => 0,
+        "message" => "Hello, $passenger Your booking to $desti has been  received successfully. Your boarding point is $board_place. Kindly confirm your payment for a complete checkout.",
+    );
+    $payload = json_encode($data);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'h_api_key:2b0ed0557644f9aa49f40b11f20063a55f741a3ca92bf5a6b51b781107456554'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $result = json_encode(curl_exec($ch));
+    echo $result;    
+    curl_close($ch);
+}
+?>
+<!--CODE TO SEND SMS-->
+
 
 <!-- put your Mail here  -->
 <?php
