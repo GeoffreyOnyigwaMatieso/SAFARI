@@ -247,12 +247,6 @@ button
 ?>
 
 <?php
-
-
-
-       
-
-
   if(isset($_POST['AddBooking'])){
 
 
@@ -295,6 +289,63 @@ button
   
 
    ?>
+
+
+<!-- put your Mail here  -->
+<?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
+if(isset($_POST["AddBooking"])){
+
+    $mail = new PHPMailer(true);
+
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'usafiribooking@gmail.com';
+    $mail->Password ='wxedreboonryosqv
+    ';
+    $mail->SMTPSecure = "tls";
+    $mail->Port = 587;
+
+
+    $mail->setFrom('usafiribooking@gmail.com');
+    $mail->addAddress($_POST["email"]);
+
+    $mail->isHTML(true);
+
+
+    $mail->Subject ="Usafiri  SignUp";
+    $mail->Body = "Hello, $passenger Your booking to $desti has been  received successfully. Your boarding point is $board_place. Kindly confirm your payment for a complete checkout.";
+
+    $mail->send();
+}
+
+   // Check if the code has already been executed
+   if (!isset($_SESSION['sent_successfully'])) {
+    // Code to execute only once
+    echo "
+      <script>
+        alert('Sent Successfully');
+        window.location.href = '1st.php';
+      </script>
+    ";
+
+    // Set a flag to indicate that the code has been executed
+    $_SESSION['sent_successfully'] = true;
+
+    // Terminate the script
+    exit;
+  }
+
+?>
+<!-- Mails ends here  -->
 
 
 
