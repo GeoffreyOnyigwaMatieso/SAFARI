@@ -8,12 +8,30 @@ session_start();
 
 ?>
 
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve the form data
+    $passenger_name = $_POST["passenger_name"];
+    $Your_destination = $_POST["Your_destination"];
+    $board_place = $_POST["board_place"];
+
+    // // Now you can use these variables safely without any warning.
+    // // For example:
+    // echo "Passenger Name: " . $passenger_name . "<br>";
+    // echo "Destination: " . $Your_destination . "<br>";
+    // echo "Boarding Place: " . $board_place . "<br>";
+
+    // Further processing and database operations can be done here
+}
+?>
+
+
 <?php include("connection.php")?>
 <!--
 <!DOCTYPE html>
 <html>
 <head>
-  <title>admin Panel suraksha</title>
+  <title>admin Geoffrey</title>
 </head>
 <body>
 
@@ -246,12 +264,63 @@ button
 */
 ?>
 
+<!-- put your Mail here  -->
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
+if(isset($_POST["submit"])){
+
+    $mail = new PHPMailer(true);
+
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'usafiribooking@gmail.com';
+    $mail->Password ='wxedreboonryosqv
+    ';
+    $mail->SMTPSecure = "tls";
+    $mail->Port = 587;
 
 
-       
+    $mail->setFrom('usafiribooking@gmail.com');
+    $mail->addAddress($_POST["email"]);
 
+    $mail->isHTML(true);
+
+
+    $mail->Subject ="Booking Successfull";
+    $mail->Body = "Hello, $passenger_name, Your destination to $Your_destination, has successfully been received, Your boarding stage is $board_place. Kindly proceed to payment for complete checkout";
+
+    $mail->send();
+}
+
+   // Check if the code has already been executed
+   if (!isset($_SESSION['sent_successfully'])) {
+    // Code to execute only once
+    echo "
+      <script>
+        alert('Sent Successfully');
+        window.location.href = '1st.php';
+      </script>
+    ";
+
+    // Set a flag to indicate that the code has been executed
+    $_SESSION['sent_successfully'] = true;
+
+    // Terminate the script
+    exit;
+  }
+
+?>
+<!-- Mails ends here  -->
+
+<?php
 
   if(isset($_POST['AddBooking'])){
 
@@ -262,10 +331,6 @@ button
      $board_place=$_POST['board_place'];
      $desti=$_POST['Your_destination'];
     
-
-    
-
-
        if($conn->connect_error)
           {
             die('Connection Failed :'.$conn->connect_error);
@@ -296,12 +361,6 @@ button
 
    ?>
 
-
-
-
-
-   
-          
 
           <div class="wrapper">
   <div class="registration_form">
@@ -340,7 +399,7 @@ button
 
 
         <div class="input_wrap">
-          <input type="submit" value="Booking Now" class="submit_btn" name="AddBooking">
+          <input type="submit" value="Booking Now" name="submit" class="submit_btn" name="AddBooking">
 
         </div>
 
